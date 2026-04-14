@@ -56,7 +56,7 @@ const ServiceModal = ({ service, onClose }: Props) => {
         <div className="flex items-center gap-6 pt-6">
           
           <a
-            href={`https://wa.me/77001234567?text=${encodeURIComponent(
+            href={`https://wa.me/77774743278?text=${encodeURIComponent(
               `Здравствуйте! Интересует услуга: ${service.title}`
             )}`}
             target="_blank"
