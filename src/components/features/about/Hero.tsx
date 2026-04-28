@@ -1,3 +1,5 @@
+import heroImg from "../assets/2.jpg"
+
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-black">
@@ -8,7 +10,7 @@ const Hero = () => {
 
       {/* ФОНОВОЕ ИЗОБРАЖЕНИЕ — более видимое */}
       <img
-        src="src/assets/2.jpg"
+        src={heroImg}
         alt=""
         className="
           absolute
