@@ -136,3 +136,41 @@ html {
     transform: translateY(0) scale(1);
   }
 }
+
+/* ── Scroll reveal animations ──────────────────────────────
+   Добавь этот блок в свой index.css или globals.css
+   ──────────────────────────────────────────────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Вариант — появление снизу быстрее */
+.reveal-fast {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.reveal-fast.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Вариант — только fade (без сдвига), для крупных блоков */
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.reveal-fade.revealed {
+  opacity: 1;
+}

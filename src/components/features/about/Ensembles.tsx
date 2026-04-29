@@ -1,4 +1,6 @@
+import { useState } from "react"
 import { ensembles } from "./data"
+import { useReveal } from "../../../hooks/useReveal"
 
 const icons: Record<string, string> = {
   "Камерный оркестр": "♬",
@@ -8,19 +10,41 @@ const icons: Record<string, string> = {
 }
 
 const Ensembles = () => {
+  const [active, setActive] = useState(0)
+  const [displayed, setDisplayed] = useState(0)
+  const [fading, setFading] = useState(false)
+
+  const labelRef  = useReveal(0)
+  const titleRef  = useReveal(100)
+  const gridRef   = useReveal(200)
+  const panelRef  = useReveal(350)
+
+  const handleSelect = (i: number) => {
+    if (i === active) return
+    setFading(true)
+    setTimeout(() => {
+      setDisplayed(i)
+      setActive(i)
+      setFading(false)
+    }, 200)
+  }
+
+  const e = ensembles[displayed]
+
   return (
     <section className="border-b border-white/10 py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_#b8860b08_0%,_transparent_50%)]" />
 
       <div className="max-w-7xl mx-auto px-8 relative z-10">
-        <div className="flex items-center gap-4 mb-6">
+
+        <div ref={labelRef} className="reveal flex items-center gap-4 mb-6">
           <div className="h-px w-12 bg-[#b8860b]" />
           <span className="text-[#b8860b] text-xs tracking-[0.3em] uppercase font-medium">
             Составы
           </span>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+        <div ref={titleRef} className="reveal flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <h2 className="font-serif text-5xl text-white font-light">
             Форматы выступлений
           </h2>
@@ -29,32 +53,86 @@ const Ensembles = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/8">
-          {ensembles.map((e) => (
-            <div
-              key={e.name}
-              className="bg-[#0a0a0a] p-8 group hover:bg-[#b8860b]/5 transition-all duration-500 cursor-default relative overflow-hidden"
+        <div ref={gridRef} className="reveal grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.06]">
+          {ensembles.map((ens, i) => (
+            <button
+              key={ens.name}
+              onClick={() => handleSelect(i)}
+              className="bg-[#0a0a0a] p-8 group relative overflow-hidden text-left focus:outline-none"
             >
-              {/* Иконка */}
-              <div className="text-4xl text-[#b8860b]/20 group-hover:text-[#b8860b]/50 transition-all duration-500 mb-6 font-serif">
-                {icons[e.name] ?? "♪"}
+              <div className={`absolute inset-0 transition-opacity duration-500 bg-[#b8860b]/5
+                ${i === active ? "opacity-100" : "opacity-0 group-hover:opacity-50"}`} />
+
+              <div className={`absolute bottom-0 left-0 h-[1.5px] bg-[#b8860b] transition-all duration-500
+                ${i === active ? "w-full" : "w-0 group-hover:w-full"}`} />
+
+              <div className={`absolute top-0 right-0 w-8 h-px bg-[#b8860b] transition-opacity duration-300
+                ${i === active ? "opacity-100" : "opacity-0"}`} />
+              <div className={`absolute top-0 right-0 w-px h-8 bg-[#b8860b] transition-opacity duration-300
+                ${i === active ? "opacity-100" : "opacity-0"}`} />
+
+              <div className={`relative text-3xl font-serif mb-5 transition-all duration-500
+                ${i === active ? "text-[#b8860b]/70" : "text-[#b8860b]/20 group-hover:text-[#b8860b]/40"}`}>
+                {icons[ens.name] ?? "♪"}
               </div>
 
-              {/* Линия-акцент */}
-              <div className="w-0 group-hover:w-8 h-0.5 bg-[#b8860b] transition-all duration-500 mb-4" />
+              <div className={`relative h-px bg-[#b8860b] mb-4 transition-all duration-500
+                ${i === active ? "w-6" : "w-0 group-hover:w-6"}`} />
 
-              <h3 className="text-white text-lg font-medium mb-2 leading-snug">
-                {e.name}
+              <h3 className="relative text-white text-base font-medium mb-1.5 leading-snug">
+                {ens.name}
               </h3>
-              <p className="text-white/40 text-sm leading-relaxed">{e.desc}</p>
+              <p className="relative text-white/35 text-sm leading-relaxed">
+                {ens.desc}
+              </p>
 
-              {/* Стрелка при ховере */}
-              <div className="absolute bottom-6 right-6 text-[#b8860b] opacity-0 group-hover:opacity-100 transition-all duration-300 text-sm">
-                ↗
+              <div className={`absolute top-5 right-6 font-mono text-[11px] transition-colors duration-300
+                ${i === active ? "text-[#b8860b]/50" : "text-white/10"}`}>
+                0{i + 1}
               </div>
-            </div>
+            </button>
           ))}
         </div>
+
+        {/* Детальная панель */}
+        <div ref={panelRef} className="reveal mt-8">
+          <div
+            style={{
+              transition: "opacity 0.2s ease, transform 0.2s ease",
+              opacity: fading ? 0 : 1,
+              transform: fading ? "translateY(10px)" : "translateY(0)",
+            }}
+            className="border border-white/[0.08] relative"
+          >
+            <div className="absolute left-0 top-8 bottom-8 w-px bg-[#b8860b]/60" />
+
+            <div className="grid lg:grid-cols-3">
+              <div className="px-12 py-10 border-b lg:border-b-0 lg:border-r border-white/[0.06]">
+                <p className="text-[#b8860b] text-[10px] tracking-[0.3em] uppercase font-medium mb-5">
+                  Состав
+                </p>
+                <p className="font-serif text-3xl text-white font-light leading-none">
+                  {e.cast}
+                </p>
+              </div>
+
+              <div className="px-12 py-10 border-b lg:border-b-0 lg:border-r border-white/[0.06]">
+                <p className="text-[#b8860b] text-[10px] tracking-[0.3em] uppercase font-medium mb-5">
+                  Подходит для
+                </p>
+                <p className="text-white/70 text-sm leading-relaxed">{e.events}</p>
+              </div>
+
+              <div className="px-12 py-10">
+                <p className="text-[#b8860b] text-[10px] tracking-[0.3em] uppercase font-medium mb-5">
+                  Репертуар
+                </p>
+                <p className="text-white/70 text-sm leading-relaxed">{e.repertoire}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   )
