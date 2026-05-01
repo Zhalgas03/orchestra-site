@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import logo from '../assets/logo.png'
 import { useReveal } from '../hooks/useReveal'
 
 const Footer = () => {
-    const labelRef = useReveal(0)
+  const { t } = useTranslation()
+  const labelRef = useReveal(0)
+
   return (
     <footer className="relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#b8860b10_0%,_transparent_70%)]" />
@@ -14,25 +17,24 @@ const Footer = () => {
         {/* CTA */}
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12 mb-16">
           <div>
-                    <div ref={labelRef} className="reveal flex items-center gap-4 mb-6">
-          <div className="h-px w-12 bg-[#b8860b]" />
-          <span className="text-[#b8860b] text-xs tracking-[0.3em] uppercase font-medium">
-            Сотрудничество
-          </span>
-        </div>
-
+            <div ref={labelRef} className="reveal flex items-center gap-4 mb-6">
+              <div className="h-px w-12 bg-[#b8860b]" />
+              <span className="text-[#b8860b] text-xs tracking-[0.3em] uppercase font-medium">
+                {t("footer.coop")}
+              </span>
+            </div>
             <h2 className="font-serif text-[clamp(2rem,4vw,3.5rem)] font-light text-white leading-tight">
-              Готовы создать музыку<br />
-              <span className="text-[#b8860b] italic">вашего события?</span>
+              {t("footer.cta_title")}<br />
+              <span className="text-[#b8860b] italic">{t("footer.cta_italic")}</span>
             </h2>
           </div>
           <div className="flex flex-col gap-4 lg:min-w-[260px]">
             <a href="https://wa.me/77774743278" target="_blank" rel="noreferrer" className="btn btn-primary btn-lg">
-              Заказать выступление
+              {t("footer.btn_order")}
               <i className="btn-arr fa-solid fa-arrow-right-long" />
             </a>
             <a href="tel:+77774743278" className="btn btn-ghost btn-lg">
-              Связаться с нами
+              {t("footer.btn_contact")}
             </a>
           </div>
         </div>
@@ -44,18 +46,18 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <img src={logo} alt="Dostar" className="h-28 w-28 opacity-80 mb-2" />
             <p className="text-sm text-white/40 leading-relaxed">
-              Эстрадно-симфонический оркестр.<br />Астана, Казахстан.
+              {t("footer.desc")}
             </p>
           </div>
 
           {/* Навигация */}
           <div className="flex flex-col gap-4">
-            <p className="text-xs tracking-[0.3em] uppercase text-white/25">Навигация</p>
+            <p className="text-xs tracking-[0.3em] uppercase text-white/25">{t("footer.nav")}</p>
             <div className="flex flex-col gap-3">
               {[
-                { label: 'Главная', to: '/' },
-                { label: 'Услуги', to: '/services' },
-                { label: 'О нас', to: '/about' },
+                { label: t("nav.home"),     to: "/" },
+                { label: t("nav.services"), to: "/services" },
+                { label: t("nav.about"),    to: "/about" },
               ].map(({ label, to }) => (
                 <Link key={to} to={to} className="text-sm text-white/50 hover:text-white transition-colors duration-200">
                   {label}
@@ -66,17 +68,19 @@ const Footer = () => {
 
           {/* Услуги */}
           <div className="flex flex-col gap-4">
-            <p className="text-xs tracking-[0.3em] uppercase text-white/25">Услуги</p>
+            <p className="text-xs tracking-[0.3em] uppercase text-white/25">{t("footer.services")}</p>
             <div className="flex flex-col gap-3">
-              {['Свадьбы', 'Корпоративы', 'Частные события'].map((s) => (
-                <span key={s} className="text-sm text-white/50">{s}</span>
+              {["wedding", "corporate", "private"].map((id) => (
+                <span key={id} className="text-sm text-white/50">
+                  {t(`services.items.${id}.title`)}
+                </span>
               ))}
             </div>
           </div>
 
           {/* Контакты */}
           <div className="flex flex-col gap-4">
-            <p className="text-xs tracking-[0.3em] uppercase text-white/25">Контакты</p>
+            <p className="text-xs tracking-[0.3em] uppercase text-white/25">{t("footer.contacts")}</p>
             <div className="flex flex-col gap-3">
               <a href="tel:+77774743278" className="text-sm text-white/50 hover:text-white transition-colors duration-200">
                 +7 777 474 32 78
@@ -84,7 +88,7 @@ const Footer = () => {
               <a href="https://wa.me/77774743278" target="_blank" rel="noreferrer" className="text-sm text-[#b8860b]/80 hover:text-[#b8860b] transition-colors duration-200">
                 WhatsApp
               </a>
-              <span className="text-sm text-white/50">Астана, Казахстан</span>
+              <span className="text-sm text-white/50">{t("footer.city")}</span>
             </div>
           </div>
 

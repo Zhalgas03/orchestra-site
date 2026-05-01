@@ -1,9 +1,9 @@
+import { useTranslation } from "react-i18next"
 import { useReveal } from "../../hooks/useReveal"
 
 interface ServiceData {
   id: string
   num: string
-  title: string
 }
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 }
 
 const ServiceItem = ({ s, i, cur, onSelect }: Props) => {
+  const { t } = useTranslation()
   const ref = useReveal(i * 150)
 
   return (
@@ -47,7 +48,7 @@ const ServiceItem = ({ s, i, cur, onSelect }: Props) => {
           transition: "color 0.3s, transform 0.35s",
         }}
       >
-        {s.title}
+        {t(`services.items.${s.id}.title`)}
       </span>
       <span
         className="ml-auto text-[#b8860b] text-sm pr-6"
